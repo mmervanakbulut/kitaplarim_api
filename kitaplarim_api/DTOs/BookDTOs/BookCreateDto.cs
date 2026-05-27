@@ -1,20 +1,12 @@
-﻿namespace kitaplarim_api.Models
+﻿namespace kitaplarim_api.DTOs.BookDTOs
 {
-	public class Book
+	public class BookCreateDto
 	{
-		public int Id { get; set; }
 		public required string Title { get; set; }
 		public required string BookType { get; set; }
 		public required int PageCount { get; set; }
 		public string ShelfLocation { get; set; } = string.Empty;
-
 		public required int AuthorId { get; set; }
-		public Author Author { get; set; } = null!;
-
-		public required int UserId { get; set; }
-		public User User { get; set; } = null!;
-
 		public required int PublisherId { get; set; }
-		public Publisher Publisher { get; set; } = null!;
 	}
 }

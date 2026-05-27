@@ -21,7 +21,6 @@ namespace kitaplarim_api.Configurations
 				.IsUnicode(true);
 
 			builder.Property(x => x.Description)
-				.HasMaxLength(200)
 				.IsUnicode(true);
 		}
 	}

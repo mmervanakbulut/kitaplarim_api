@@ -34,6 +34,10 @@ namespace kitaplarim_api.Configurations
 				.WithMany(u => u.Books)
 				.HasForeignKey(x => x.PublisherId)
 				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasIndex(x => x.UserId);
+			builder.HasIndex(x => x.AuthorId);
+			builder.HasIndex(x => x.PublisherId);
 		}
 	}
 }

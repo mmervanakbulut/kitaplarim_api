@@ -23,7 +23,7 @@ namespace kitaplarim_api.Configurations
 			builder.HasIndex(x => x.Email)
 				.IsUnique();
 
-			builder.Property(x => x.PasswordHash)
+			builder.Property(x => x.HashedPassword)
 				.IsRequired()
 				.HasMaxLength(256)
 				.IsUnicode(false);

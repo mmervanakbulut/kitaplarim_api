@@ -18,7 +18,9 @@ namespace kitaplarim_api.Controllers
 		[HttpPost("register")]
 		public async Task<IActionResult> Register([FromBody] UserCreateDto request)
 		{
-			if (await context.Users.AnyAsync(u => u.Email == request.Email))
+			var emailToSave = request.Email.ToLower();
+
+			if (await context.Users.AnyAsync(u => u.Email == emailToSave))
 			{
 				return BadRequest("Email already exists.");
 			}
@@ -26,7 +28,7 @@ namespace kitaplarim_api.Controllers
 			var user = new User
 			{
 				Nickname = request.Nickname,
-				Email = request.Email
+				Email = emailToSave
 			};
 
 			// password hashing
@@ -42,7 +44,8 @@ namespace kitaplarim_api.Controllers
 		[HttpPost("login")]
 		public async Task<IActionResult> Login([FromBody] UserLoginDto request)
 		{ 
-			var user = await context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+			var emailToLogin = request.Email.ToLower();
+			var user = await context.Users.FirstOrDefaultAsync(u => u.Email == emailToLogin);
 
 			if (user == null)
 			{
@@ -51,7 +54,7 @@ namespace kitaplarim_api.Controllers
 
 			// password verification with password hasher
 			var passwordHasher = new PasswordHasher<User>();
-			var verificationResult = passwordHasher.VerifyHashedPassword(user, user.HashedPassword, request.Password);
+			var verificationResult = passwordHasher.VerifyHashedPassword(user, user.HashedPassword!, request.Password);
 
 			if (verificationResult == PasswordVerificationResult.Failed)
 			{
@@ -60,7 +63,7 @@ namespace kitaplarim_api.Controllers
 
 			// Generate JWT token and expire time
 			var tokenHandler = new JwtSecurityTokenHandler();
-			var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
+			var key = Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!);
 
 			var expirationTime = DateTime.UtcNow.AddHours(1);
 
